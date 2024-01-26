@@ -1,0 +1,33 @@
+// Function to read the "map.txt" file and return all the map names
+map<string, string> readMapFile() {
+    ifstream file("map.txt");
+    map<string, string> maps;
+
+    if (file.is_open()) {
+        string line;
+        string mapName;
+        string mapContent;
+
+        while (getline(file, line)) {
+            if (line.find("Maze: ") != string::npos) {
+                if (!mapName.empty() && !mapContent.empty()) {
+                    maps[mapName] = mapContent;
+                }
+                mapName = line.substr(6);
+                mapContent = "";
+            } else {
+                mapContent += line + "\n";
+            }
+        }
+
+        if (!mapName.empty() && !mapContent.empty()) {
+            maps[mapName] = mapContent;
+        }
+
+        file.close();
+    } else {
+        cout << "Unable to open file" << endl;
+    }
+
+    return maps;
+}
