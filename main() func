@@ -1,0 +1,325 @@
+int main() {
+	vector<GameHistory> gameHistory;
+	map<string, vector<int>> maps ;
+	string mazeName;
+	string fileName;
+	string chosenMapName;
+	string username;
+	int time;
+	int n = 0, m = 0; // for generating mazes
+	int option = 0 ;
+	int maps_read_option;
+	bool result;
+	string res;
+	while(option != 6){
+	    int choice;
+	    cout << "Choose an option: \n1. Sign up\n2. Log in\n";
+	    cin >> choice;
+		
+		GameHistory currentGame;
+	    
+	    auto now = chrono::system_clock::now() ;
+	    time_t now_c = chrono::system_clock::to_time_t(now) ;
+	    
+	    currentGame.date = ctime(&now_c) ;
+	    currentGame.userName = username ;
+	    currentGame.mapName = chosenMapName ;
+	    currentGame.timeSpent = time ;
+	    
+	    if(result){
+	    	res = "WON";
+		}
+		else{
+			res = "LOSE";
+		}
+	    currentGame.gameResult = res ;
+	    
+    	gameHistory.push_back(currentGame);
+    	
+		if (gameHistory.size() > 10) {
+	        gameHistory.erase(gameHistory.begin(), gameHistory.begin() + (gameHistory.size() - 10));
+	    }
+		
+		
+	    if (choice == 1) {
+	        // Sign up logic
+	        User newUser;
+	        cout << "Enter username: ";
+	        cin >> newUser.username;
+	        newUser.username = username;
+	        cout << "Enter password: ";
+	        cin >> newUser.password;
+	        saveUser(newUser);
+	        cout << "User signed up successfully!" << endl;
+	        
+	            do {
+			        option = displayMenu();
+			
+			        switch (option) {
+			            case 1:
+			            	cout << "creating a new maze ...\nplease enter the size of maze that you want on this style: i j .\n";
+			                cin >> n >> m ;
+			                cout << "Enter the name of the maze: ";
+			                cin >> mazeName;
+			                generateAndSaveMaze(n, m, mazeName);
+			                break;
+			            case 2:
+			            	
+			                cout << "\nDo you want to use an old map?\n1. YES\n2. NO\n";
+			                cin >> maps_read_option;
+			                
+			                if (maps_read_option == 1){
+			                	cout << "\nold maps:" << endl;
+			                	map<string, string> maps = readMapFile();
+									
+							    for (const auto& map : maps) {
+							        cout << map.first << endl;
+							    }
+								
+							    string chosenMapName;
+							    cout << "Enter the name of the map to show: ";
+							    cin >> chosenMapName;
+								
+							    if (maps.find(chosenMapName) != maps.end()) {
+							        cout << "Chosen Map: " << endl;
+							        cout << maps[chosenMapName] << endl;
+							    } 
+								else {
+							        cout << "Map not found" << endl;
+							    }
+							    playGameWithDynamicMap(maps[chosenMapName],result);
+							}
+			                else {
+			                	cout << "Enter the name of the map file: ";
+							    cin >> fileName;
+							
+							    vector<vector<int>> userMap = readUserMapFile(fileName);
+							
+							    // Display the user map
+							    for (const auto& row : userMap) {
+							        for (int cell : row) {
+							            cout << cell << " ";
+							        }
+							        cout << endl;
+							    }
+								cout << "\nstarting the game ...\n";
+								playGameWithDynamicMap(fileName,result);
+							}
+							break;
+			            case 3:
+			            	
+			                cout << "\nDo you want to use an old map?\n1. YES\n2. NO\n";
+			                cin >> maps_read_option;
+			                
+			                if (maps_read_option == 1){
+			                	cout << "\nold maps:" << endl;
+			                	map<string, string> maps = readMapFile();
+									
+							    for (const auto& map : maps) {
+							        cout << map.first << endl;
+							    }
+								
+							    string chosenMapName;
+							    cout << "Enter the name of the map to show: ";
+							    cin >> chosenMapName;
+								
+							    if (maps.find(chosenMapName) != maps.end()) {
+							        cout << "Chosen Map: " << endl;
+							        cout << maps[chosenMapName] << endl;
+							    } 
+								else {
+							        cout << "Map not found" << endl;
+							    }
+							    playGameWithDynamicMap(maps[chosenMapName],result);
+							}
+			                else {
+			                	cout << "Enter the name of the map file: ";
+							    cin >> fileName;
+							
+							    vector<vector<int>> userMap = readUserMapFile(fileName);
+							
+							    // Display the user map
+							    for (const auto& row : userMap) {
+							        for (int cell : row) {
+							            cout << cell << " ";
+							        }
+							        cout << endl;
+							    }
+							cout << "\nstarting the game ...\n";
+							auto startTime = chrono::high_resolution_clock::now();
+						    playGameWithDynamicMap(fileName,result);
+						    auto endTime = chrono::high_resolution_clock::now();
+						    	    
+							// Calculate the time spent playing the game
+	   						auto time = chrono::duration_cast<chrono::seconds>(endTime - startTime).count();
+							}
+							break;
+			            case 4:
+			                // Display the game history
+					    	cout << "Game History:" << endl;
+					    	for (const auto& game : gameHistory) {
+						        cout << "Date: " << game.date << endl;
+						        cout << "User Name: " << game.userName << endl;
+						        cout << "Map Name: " << game.mapName << endl;
+						        cout << "Time Spent: " << game.timeSpent << " seconds" << endl;
+						        cout << "Game Result: " << game.gameResult << endl;
+						        cout << endl;
+					    	}
+
+			                break;
+			            case 5:
+			                
+			                break;
+			            case 6:
+			                cout << "Exiting the game..." << endl;
+			                break;
+			            default:
+			                cout << "Invalid option. Please try again." << endl;
+			                break;
+			        }
+			    } while (option != 6);
+	    } 
+		
+		else if (choice == 2) {
+	        // Log in logic
+	        string password;
+	        cout << "Enter username: ";
+	        cin >> username;
+	        cout << "Enter password: ";
+	        cin >> password;
+	        if (userExists(username, password)) {
+	            cout << "User logged in successfully!" << endl;
+	            do {
+			        option = displayMenu();
+			
+			        switch (option) {
+			            case 1:
+			            	cout << "creating a new maze ...\nplease enter the size of maze that you want on this style: i j .\n";
+			                cin >> n >> m ;
+			                cout << "Enter the name of the maze: ";
+			                cin >> mazeName;
+			                generateAndSaveMaze(n, m, mazeName);
+			                break;
+			            case 2:
+			            	
+			                cout << "\nDo you want to use an old map?\n1. YES\n2. NO\n";
+			                cin >> maps_read_option;
+			                
+			                if (maps_read_option == 1){
+			                	cout << "\nold maps:" << endl;
+			                	map<string, string> maps = readMapFile();
+									
+							    for (const auto& map : maps) {
+							        cout << map.first << endl;
+							    }
+								
+							    string chosenMapName;
+							    cout << "Enter the name of the map to show: ";
+							    cin >> chosenMapName;
+								
+							    if (maps.find(chosenMapName) != maps.end()) {
+							        cout << "Chosen Map: " << endl;
+							        cout << maps[chosenMapName] << endl;
+							    } 
+								else {
+							        cout << "Map not found" << endl;
+							    }
+							    playGameWithDynamicMap(maps[chosenMapName],result);
+							}
+			                else {
+			                	cout << "Enter the name of the map file: ";
+							    cin >> fileName;
+							
+							    vector<vector<int>> userMap = readUserMapFile(fileName);
+							
+							    // Display the user map
+							    for (const auto& row : userMap) {
+							        for (int cell : row) {
+							            cout << cell << " ";
+							        }
+							        cout << endl;
+							    }
+								cout << "\nstarting the game ...\n";
+								playGameWithDynamicMap(fileName,result);
+							}
+							break;
+			            case 3:
+			            	
+			                cout << "\nDo you want to use an old map?\n1. YES\n2. NO\n";
+			                cin >> maps_read_option;
+			                
+			                if (maps_read_option == 1){
+			                	cout << "\nold maps:" << endl;
+			                	map<string, string> maps = readMapFile();
+									
+							    for (const auto& map : maps) {
+							        cout << map.first << endl;
+							    }
+								
+							    string chosenMapName;
+							    cout << "Enter the name of the map to show: ";
+							    cin >> chosenMapName;
+								
+							    if (maps.find(chosenMapName) != maps.end()) {
+							        cout << "Chosen Map: " << endl;
+							        cout << maps[chosenMapName] << endl;
+							    } 
+								else {
+							        cout << "Map not found" << endl;
+							    }
+							    playGameWithDynamicMap(maps[chosenMapName],result);
+							}
+			                else {
+			                	cout << "Enter the name of the map file: ";
+							    cin >> fileName;
+							
+							    vector<vector<int>> userMap = readUserMapFile(fileName);
+							
+							    // Display the user map
+							    for (const auto& row : userMap) {
+							        for (int cell : row) {
+							            cout << cell << " ";
+							        }
+							        cout << endl;
+							    }
+								cout << "\nstarting the game ...\n";
+								playGameWithDynamicMap(fileName,result);
+							}
+							break;
+			            case 4:
+			                // Display the game history
+					    	cout << "Game History:" << endl;
+					    	for (const auto& game : gameHistory) {
+						        cout << "Date: " << game.date << endl;
+						        cout << "User Name: " << game.userName << endl;
+						        cout << "Map Name: " << game.mapName << endl;
+						        cout << "Time Spent: " << game.timeSpent << " seconds" << endl;
+						        cout << "Game Result: " << game.gameResult << endl;
+						        cout << endl;
+					    	}
+
+			                break;
+			            case 5:
+			                // info
+			                break;
+			            case 6:
+			                cout << "Exiting the game..." << endl;
+			                break;
+			            default:
+			                cout << "Invalid option. Please try again." << endl;
+			                break;
+			        }
+			    } while (option != 6);
+			    
+	        } 
+			
+			else {
+	            cout << "Invalid username or password." << endl;
+	        }
+	    } 
+		else {
+	        cout << "Invalid choice." << endl;
+	    }
+	}
+    return 0;
+}
