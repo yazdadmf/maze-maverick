@@ -1,0 +1,28 @@
+// Function to check if the maze has a valid path using depth-first search
+bool hasValidPath(const vector<vector<int>>& maze, int row, int col, vector<vector<bool>>& visited) {
+    int numRows = maze.size();
+    int numCols = maze[0].size();
+
+    // Check if the current cell is out of bounds or a wall
+    if (row < 0 || row >= numRows || col < 0 || col >= numCols || maze[row][col] <= 0 || visited[row][col]) {
+        return false;
+    }
+
+    // Check if the current cell is the ending cell
+    if (row == numRows - 1 && col == numCols - 1) {
+        return true;
+    }
+
+    // Mark the current cell as visited
+    visited[row][col] = true;
+
+    // Explore the neighboring cells
+    if (hasValidPath(maze, row - 1, col, visited) ||
+        hasValidPath(maze, row + 1, col, visited) ||
+        hasValidPath(maze, row, col - 1, visited) ||
+        hasValidPath(maze, row, col + 1, visited)) {
+        return true;
+    }
+
+    return false;
+}
