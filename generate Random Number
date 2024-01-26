@@ -1,0 +1,4 @@
+// Function to generate a random number between -3 and 3
+int generateRandomNumber() {
+    return rand() % 7 - 3;
+}
