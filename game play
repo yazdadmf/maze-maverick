@@ -1,0 +1,77 @@
+// Function to play the game with the dynamic map
+void playGameWithDynamicMap(const string& fileName, bool result) {
+	bool check;
+    vector<vector<int>> map = readMapFile(fileName,check);
+    if(!check){
+    	return ;
+	}
+    int row = 0;
+    int col = 0;
+    char input;
+	int userPath = 0 ;
+	// Get number of elements in vector
+    size_t len = map.size();
+    // Display the initial map
+    for (const auto& r : map) {
+        for (int cell : r) {
+            if (cell == 0) {
+                cout << "\033[1;30m" << cell << " " << "\033[0m";
+            } else if (cell == 1) {
+                cout << "\033[1;37m" << cell << " " << "\033[0m";
+            } else if (cell == 2) {
+                cout << "\033[1;34m" << cell << " " << "\033[0m";
+            } else if (cell == 3) {
+                cout << "\033[1;31m" << cell << " " << "\033[0m";
+            }
+        }
+        cout << endl;
+    }
+
+    // Play the game
+    while (true) {
+        cout << "Enter 'd' to move down or 'r' to move right: ";
+        cin >> input;
+
+        movePlayer(map, row, col, input);
+        cout << endl;
+
+        // Check if the player has reached the end of the map
+        if (row == map.size() - 1 && col == map[0].size() - 1) {
+        	
+            cout << "You have reached the end of the map." << endl;
+            
+            if(hasUserWonMap(userPath, len)){
+            	cout << "WON!!!!!";
+            	result = true ;
+			}
+			else{
+				cout << "LOSE :(";
+				result = false;
+			}
+            break;
+        }
+
+        // Display the map after each movement
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map[0].size(); j++) {
+                if (i == row && j == col) {
+                    cout << "\033[1;32m" << map[i][j] << " " << "\033[0m";
+                } else {
+                    int cell = map[i][j];
+                    if (cell == 0) {
+                        cout << "\033[1;30m" << cell << " " << "\033[0m";
+                    } else if (cell == 1) {
+                        cout << "\033[1;37m" << cell << " " << "\033[0m";
+                    } else if (cell == 2) {
+                        cout << "\033[1;34m" << cell << " " << "\033[0m";
+                    } else if (cell == 3) {
+                        cout << "\033[1;31m" << cell << " " << "\033[0m";
+                    }
+                    userPath += cell;
+                }
+
+            }
+            cout << endl;
+        }
+    }
+}
