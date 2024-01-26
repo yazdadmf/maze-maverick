@@ -1,0 +1,8 @@
+// Struct to store game history information
+struct GameHistory {
+    string date;
+    string userName;
+    string mapName;
+    int timeSpent;
+    string gameResult;
+};
