@@ -1,0 +1,28 @@
+// Function to move the player down and right and change the color of the cell
+void movePlayer(vector<vector<int>>& map, int& row, int& col, char direction) {
+    if (direction == 'd') {
+        if (row < map.size() - 1) {
+            row++;
+        } else {
+            cout << "Wrong way! You cannot move down." << endl;
+        }
+    } else if (direction == 'r') {
+        if (col < map[0].size() - 1) {
+            col++;
+        } else {
+            cout << "Wrong way! You cannot move right." << endl;
+        }
+    }
+
+    // Change the color of the cell based on the number in the cell
+    int cell = map[row][col];
+    if (cell == 0) {
+        cout << "\033[1;30m" << cell << " " << "\033[0m";
+    } else if (cell == 1) {
+        cout << "\033[1;37m" << cell << " " << "\033[0m";
+    } else if (cell == 2) {
+        cout << "\033[1;34m" << cell << " " << "\033[0m";
+    } else if (cell == 3) {
+        cout << "\033[1;31m" << cell << " " << "\033[0m";
+    }
+}
