@@ -1,0 +1,25 @@
+// Function to read a user map file and return the map
+vector<vector<int>> readUserMapFile(const string& fileName) {
+    ifstream file(fileName);
+    vector<vector<int>> map;
+
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            vector<int> row;
+            istringstream iss(line);
+            int num;
+            while (iss >> num) {
+                row.push_back(num);
+            }
+            if (!row.empty()) {
+                map.push_back(row);
+            }
+        }
+        file.close();
+    } else {
+        cout << "Unable to open file" << endl;
+    }
+
+    return map;
+}
