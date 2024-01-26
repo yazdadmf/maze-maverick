@@ -1,0 +1,17 @@
+// menu
+int displayMenu() {
+    int choice;
+
+    cout << "\nWelcome to the Game Menu!" << endl;
+    cout << "Please choose an option:" << endl;
+    cout << "1. Creat a new maze " << endl;
+    cout << "2. Play ground " << endl;
+    cout << "3. Solve the maze " << endl;
+    cout << "4. History " << endl;
+    cout << "5. User information " << endl;
+    cout << "6. exit " << endl;
+
+    cin >> choice;
+
+    return choice;
+}
