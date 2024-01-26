@@ -1,0 +1,9 @@
+// Function to check if the user has won the map by following the true path
+bool hasUserWonMap(int userPath , int lastCellValue) {
+	if(userPath == lastCellValue){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
